@@ -5,7 +5,7 @@ const App = () => {
   const [page, setPage] = useState(1);
   const canvasRef = useRef(null);
 
-  const { pdfDocument, pdfPage } = usePdf({
+  const { pdfDocument } = usePdf({
     file: 'test.pdf',
     page,
     canvasRef,
@@ -14,7 +14,7 @@ const App = () => {
   return (
     <div>
       {!pdfDocument && <span>Loading...</span>}
-      <canvas ref={canvasRef} />
+      <canvas ref={canvasRef} style={{border: "1px solid blue"}} />
       {Boolean(pdfDocument && pdfDocument.numPages) && (
         <nav>
           <ul className="pager">
