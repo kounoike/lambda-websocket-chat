@@ -1,25 +1,39 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState, useRef } from 'react';
+import { usePdf } from '@mikecousins/react-pdf';
 
-function App() {
+const MyPdfViewer = () => {
+  const [page, setPage] = useState(1);
+  const canvasRef = useRef(null);
+
+  const { pdfDocument, pdfPage } = usePdf({
+    file: 'test.pdf',
+    page,
+    canvasRef,
+  });
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      {!pdfDocument && <span>Loading...</span>}
+      <canvas ref={canvasRef} />
+      {Boolean(pdfDocument && pdfDocument.numPages) && (
+        <nav>
+          <ul className="pager">
+            <li className="previous">
+              <button disabled={page === 1} onClick={() => setPage(page - 1)}>
+                Previous
+              </button>
+            </li>
+            <li className="next">
+              <button
+                disabled={page === pdfDocument.numPages}
+                onClick={() => setPage(page + 1)}
+              >
+                Next
+              </button>
+            </li>
+          </ul>
+        </nav>
+      )}
     </div>
   );
-}
-
-export default App;
+};
